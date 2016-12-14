@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#f0f0f0">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
+        android:background="#ffffff"
+        android:paddingLeft="30dp">
+
+        <TextView
+            android:id="@+id/c_item_history_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:text="历史记录标题"
+            android:textColor="#606060"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/c_item_history_url_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/c_item_history_title_text"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp"
+            android:text="This is a Url of history"
+            android:textColor="#b0b0b0" />
+    </RelativeLayout>
+</RelativeLayout>
