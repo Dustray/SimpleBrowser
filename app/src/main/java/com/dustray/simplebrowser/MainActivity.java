@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -22,6 +23,7 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
@@ -69,7 +71,7 @@ import static android.support.v7.appcompat.R.attr.height;
 import static android.support.v7.appcompat.R.id.top;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private Intent intent;
     private WebView webView;
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity
     private Button searchBtn, showSearchBtn, cleanSearchBtn;
     private CheckBox checkNeverShow;
     private SharedPreferences mSharedPreferences;
+    private SwipeRefreshLayout swipeLayout;
     //初始化动画
     Animation showAnimation = new ScaleAnimation(0.0f, 1.0f, 1.0f, 1.0f);
     Animation hideAnimation = new ScaleAnimation(1.0f, 0.0f, 1.0f, 1.0f);
@@ -106,7 +109,7 @@ public class MainActivity extends AppCompatActivity
         //动画设置时间
         showAnimation.setDuration(100);
         hideAnimation.setDuration(100);
-        loadWebView();//加载WebView
+        loadWebView();//加载SwipeRefreshLayout和WebView
         initializeControl();//初始化其他控件
         initializeDatabase();//初始化sqlite
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -202,6 +205,7 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
     }
 
     public void dialog() {
@@ -224,7 +228,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
-        builder.setNegativeButton("不看",  new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("不看", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // TODO Auto-generated method stub
@@ -269,6 +273,11 @@ public class MainActivity extends AppCompatActivity
      * 加载WebView
      */
     public void loadWebView() {
+        //下拉刷新控件
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorSchemeResources(android.R.color.holo_orange_dark, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
+
         webView = (WebView) findViewById(R.id.web_view);
         //支持javascript
         webView.getSettings().setJavaScriptEnabled(true);
@@ -299,17 +308,18 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-        //intent = this.getIntent();// 获取Intent对象
-        //Bundle bundle = intent.getExtras();// Bundle存取数据
-        //String url = bundle.getString("_weblink");
-
-        //String temp = url.substring(0, 4);
-        // Toast.makeText(WebActivity.this, "url:" + temp,
-        // Toast.LENGTH_SHORT).show();
-        //if (!temp.equals("http")) {
-        //    url = "http://" + url;
-        //}https://m.baidu.com/s?from=1012852p&word=%E6%B5%81%E9%87%8F
         webView.loadUrl("https://m.baidu.com/s?from=1012852p&word=" + searchStr);
+    }
+
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                swipeLayout.setRefreshing(false);
+                webView.reload();// 刷新页面
+            }
+        }, 100);
+
     }
 
     /**
@@ -333,7 +343,7 @@ public class MainActivity extends AppCompatActivity
             //Toast.makeText(MainActivity.this, url, Toast.LENGTH_SHORT).show();
 
             if (!sf.filterWebsite(url)) {
-                Toast.makeText(MainActivity.this, "禁止访问此网站", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "已拦截，关键字：" + sf.getFilterKey(), Toast.LENGTH_SHORT).show();
                 webView.stopLoading();
                 webView.goBack();
             }
@@ -348,10 +358,9 @@ public class MainActivity extends AppCompatActivity
                     "document.getElementsByTagName('html')[0].innerHTML+'</head>');");
             SiteFilter sf = new SiteFilter(MainActivity.this, db);
             if (!sf.filterWebsite(url)) {
-                Toast.makeText(MainActivity.this, "禁止访问此网站", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "已拦截，关键字："+sf.getFilterKey(), Toast.LENGTH_SHORT).show();
                 webView.stopLoading();
                 webView.goBack();
-                //goBackPage();
             }
             super.onPageFinished(view, url);
             progressBar.hide();
@@ -424,8 +433,7 @@ public class MainActivity extends AppCompatActivity
             // Toast.makeText(MainActivity.this, html, Toast.LENGTH_SHORT).show();
             SiteFilter sf = new SiteFilter(MainActivity.this, db);
             if (!sf.filterKeyWord(html)) {
-                // Toast.makeText(MainActivity.this, "此网页是否为新闻页面？", Toast.LENGTH_SHORT).show();
-                Snackbar.make(webView, "此网站是否为新闻网站", Snackbar.LENGTH_LONG)
+                Snackbar.make(webView, "此网站是否为新闻网站，关键词：" + sf.getFilterKey(), Snackbar.LENGTH_LONG)
                         .setAction("是", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -496,6 +504,12 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_manage) {
             Intent intent = new Intent(MainActivity.this, TestShakeActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_letter) {
+            Intent intent = new Intent(MainActivity.this, MessageForWeiActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_nofilter) {
+            Intent intent = new Intent(MainActivity.this, ApplyNoFilterActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_share) {
 

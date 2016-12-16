@@ -19,7 +19,14 @@
                 android:id="@+id/nav_slideshow"
                 android:icon="@drawable/ic_menu_slideshow"
                 android:title="添加关键字" />
-
+            <item
+                android:id="@+id/nav_letter"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="我收到的信" />
+            <item
+                android:id="@+id/nav_nofilter"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="申请取消拦截" />
         </menu>
     </item>
     <item android:title="开发">

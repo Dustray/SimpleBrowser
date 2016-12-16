@@ -21,6 +21,7 @@ public class SiteFilter {
     private List<KeywordEntity> keywordList = new ArrayList<KeywordEntity>();
     private SQLiteDatabase db;
     private Context mContext;
+    private String theKey;
 
     public SiteFilter(Context mContext, SQLiteDatabase db) {
         this.mContext = mContext;
@@ -38,17 +39,17 @@ public class SiteFilter {
         getKeyword();
         for (KeywordEntity ke : keywordList) {
 
-            if (url.contains(ke.getKeyword()))
+            if (url.contains(ke.getKeyword())) {
+                theKey = ke.getKeyword();
                 result = false;
-        }/*
-        for (int i = 0; i < keyword.length; i++) {
-
-            if (url.contains(keyword[i]))
-                result = false;
-        }*/
+            }
+        }
         return result;
     }
-
+    //获取拦截关键字
+    public String getFilterKey(){
+        return theKey;
+    }
     private void getKeyword() {
                 /*查询所有信息*/
         Cursor c = db.rawQuery("select * from allkeyword", null);
@@ -69,8 +70,10 @@ public class SiteFilter {
         boolean result = true;
         String keyword[] = {"新闻网", "日报", "记者", "日讯", "近日", "媒体", "报道", "依法", "调查", "摄影师", "网友", "爆料", "微博", "全国", "新华", "央视"};
         for (int i = 0; i < keyword.length; i++) {
-            if (html.contains(keyword[i]))
+            if (html.contains(keyword[i])) {
+                theKey = keyword[i];
                 result = false;
+            }
         }
         return result;
     }
