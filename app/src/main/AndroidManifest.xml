@@ -44,7 +44,8 @@
         <activity android:name=".TestShakeActivity" />
         <activity android:name=".AddKeywordActivity" />
         <activity android:name=".HistoryActivity" />
-        <activity android:name=".MessageForWeiActivity"></activity>
+        <activity android:name=".MessageForWeiActivity" />
+        <activity android:name=".ApplyNoFilterActivity"></activity>
     </application>
 
 </manifest>

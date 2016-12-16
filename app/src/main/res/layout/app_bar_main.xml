@@ -62,7 +62,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="8dp"
-                    android:background="@drawable/xml_btn_white_frame_search"
+                    android:background="@drawable/xml_btn_pink"
                     android:text="搜索"
                     android:textColor="#ffffff"
                     android:visibility="gone" />

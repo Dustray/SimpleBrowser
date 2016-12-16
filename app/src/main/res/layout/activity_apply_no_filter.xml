@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_apply_no_filter"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dustray.simplebrowser.ApplyNoFilterActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#f0f0f0"
+        android:padding="4dp"
+        android:id="@+id/relativeLayout">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edt_apply_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:background="@drawable/xml_btn_white"
+                android:hint="password"
+                android:paddingLeft="10dp" />
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edt_apply_time"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="0.7"
+                android:background="@drawable/xml_btn_white"
+                android:hint="minute"
+                android:paddingLeft="10dp" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/btn_nofilter_time"
+            android:layout_width="41dp"
+            android:layout_height="41dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/xml_btn_green"
+            android:text="SURE"
+            android:textColor="#ffffff" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="7dp"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/relativeLayout2">
+
+        <Button
+            android:id="@+id/btn_start_nofilter"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/xml_btn_pink"
+            android:text="开始"
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:id="@+id/text_nofilter_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btn_start_nofilter"
+            android:layout_alignBottom="@+id/btn_start_nofilter"
+            android:layout_toEndOf="@+id/textView2"
+            android:layout_toRightOf="@+id/textView2"
+            android:text="Loading..." />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="当前剩余分钟数："
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+
+
+</RelativeLayout>
