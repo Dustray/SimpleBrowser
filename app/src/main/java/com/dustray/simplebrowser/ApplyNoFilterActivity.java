@@ -58,7 +58,7 @@ public class ApplyNoFilterActivity extends AppCompatActivity implements View.OnC
 
         userType = spHelper.getUserType();
         if (userType == 1) {
-            startNofilterBtn.setVisibility(View.GONE);
+            //startNofilterBtn.setVisibility(View.GONE);
         } else if (userType == 2) {
             applyTimeEdt.setHint("申请免屏蔽时间");
             applyPwdEdt.setVisibility(View.GONE);
