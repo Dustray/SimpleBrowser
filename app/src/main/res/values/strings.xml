@@ -1,34 +1,119 @@
 <resources>
-    <string name="app_name">极简浏览器</string>
+    <string name="app_name">绿色守护浏览器</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="weiwei1">亲爱的小不点：</string>
-    <string name="weiwei2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-        珂珂先给你道个歉，珂珂为沉默道歉，珂珂这就说说心里想的。</string>
-    <string name="weiwei3">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-        首先，珂珂从来没有想过惹韦韦生气，韦韦生气的时候珂珂也试过道歉，韦韦伤心的时候珂珂也试过安慰韦韦，珂珂不会说话，
-        珂珂只会说“韦韦我错了你别生气了”，可是珂珂感觉韦韦越来越生气，越来越不高兴。
-        珂珂不知道什么办，珂珂当时心里想，韦韦能不能别生气，珂珂不喜欢，珂珂知道韦韦也不喜欢，珂珂喜欢和韦韦高高兴兴在一起。
-        可是珂珂也是个要面子的男人，珂珂和韦韦吵架在旁边有人的时候放不开。</string>
-    <string name="weiwei4">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-        珂珂有时候并不认同韦韦生气的原因，可是不知道为什么珂珂说不出原因，怕是说了之后韦韦哭的更厉害，火上浇油，珂珂知道吵不过韦韦，珂珂从来都没和别人吵过架，
-        珂珂以前遇到不高兴的事生气的事都自己往肚子里咽，珂珂绝对不是故意不说话的，珂珂没有这个意识没有这个习惯，嘴上的能力都快退化了。
-        珂珂知道你一遍一遍让我说话的心情，珂珂心里也很着急，脑子完全空了。</string>
-    <string name="weiwei5">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-        珂珂不喜欢韦韦皱眉头，不喜欢韦韦因为不高兴地哼哼，珂珂喜欢韦韦撒娇地哼哼。珂珂还喜欢韦韦对珂珂说“珂珂你好萌啊”。</string>
-    <string name="weiwei6">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;珂珂暂时就想这么多</string>
-    <string name="weiwei7">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;2016.12</string>
+    <string name="weiwei1">null</string>
+    <string name="weiwei2">null</string>
+    <string name="weiwei3">null</string>
+    <string name="weiwei4">null</string>
+    <string name="weiwei5">null</string>
+    <string name="weiwei6">null</string>
+    <string name="weiwei7">null</string>
 
-    <string name="weiwei8">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-        韦韦，倒不是因为昨晚你不让我玩游戏的原因来给你写信，昨晚那个游戏真不能中断，当然如果有什么非常急的事情中断也就中断了，但我不是做了15、16年真题了吗，虽然不多，所以就想玩会，
-        本来以为十几分钟就能结束的，谁知道那局打的那么拖拉。这种游戏跟电脑玩的话退出也就退出了，输了也没事，但这是跟人打，我退出了别人就说我挂机坑队友还会举报，四个人一起举报的话就直接被封号。总之你玩玩这游戏就知道了。</string>
-    <string name="weiwei9">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-        还有，珂珂发现了一点韦韦不好的地方，但是不是说韦韦不好，韦韦最好了。可是韦韦能不能不要问也不问先夺手机，或者还没看清珂珂在干什么就先说“别...”，
-        如果珂珂是在看新闻玩单机游戏的话韦韦说一句别玩了珂珂一定放下手机，即使不是立即放下，也会在看完那篇新闻之后放下。单机游戏也就无所谓了。
-        珂珂非常不喜欢被中途打断，就像韦韦也非常不喜欢计划被打乱。</string>
-    <string name="weiwei9_1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;爱你，韦韦~！</string>
-    <string name="weiwei10">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;2016.12.16</string>
+    <string name="weiwei8">null</string>
+    <string name="weiwei9">null</string>
+    <string name="weiwei9_1">null</string>
+    <string name="weiwei10">null</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">常规</string>
+
+    <string name="pref_title_social_recommendations">不进行网页内容拦截</string>
+    <string name="pref_description_social_recommendations">开启后将不提示“此网页是否为新闻网页”
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">登录</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_account">邮箱/用户名</string>
+    <string name="prompt_email">监护人邮箱</string>
+    <string name="prompt_username">被监护人用户名</string>
+    <string name="prompt_password">密码</string>
+    <string name="prompt_guardian_password">监护人密码</string>
+    <string name="prompt_unguardian_password">被监护人密码</string>
+    <string name="prompt_password_again">再次输入密码</string>
+    <string name="prompt_identifying_code">验证码,请点击获取</string>
+    <string name="action_sign_in">登  录</string>
+    <string name="action_sign_in_short">登录</string>
+    <string name="action_register">注  册</string>
+    <string name="action_register_short">注册</string>
+    <string name="error_invalid_email">Email地址无效</string>
+    <string name="error_exist_email">此Email已被注册</string>
+    <string name="error_exist_username">此那么用户名已被注册</string>
+    <string name="error_invalid_password">密码不少于6位</string>
+    <string name="error_invalid_username">用户名不少于4位</string>
+    <string name="error_insame_password">两次密码不同</string>
+    <string name="error_incorrect_password">密码不正确</string>
+    <string name="error_field_required">不能为空</string>
+    <string name="permission_rationale">"提供电子邮件完成所需的联系人权限"
+    </string>
 </resources>

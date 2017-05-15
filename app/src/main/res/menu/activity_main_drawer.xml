@@ -8,13 +8,9 @@
     <item android:title="浏览器">
         <menu>
             <item
-                android:id="@+id/nav_camera"
+                android:id="@+id/nav_history"
                 android:icon="@drawable/ic_menu_camera"
-                android:title="所有历史记录" />
-            <item
-                android:id="@+id/nav_gallery"
-                android:icon="@drawable/ic_menu_gallery"
-                android:title="本次历史记录" />
+                android:title="历史记录" />
             <item
                 android:id="@+id/nav_slideshow"
                 android:icon="@drawable/ic_menu_slideshow"
@@ -22,14 +18,22 @@
             <item
                 android:id="@+id/nav_letter"
                 android:icon="@drawable/ic_menu_slideshow"
-                android:title="我收到的信" />
+                android:title="我收到的信"
+                android:visible="false" />
             <item
                 android:id="@+id/nav_nofilter"
                 android:icon="@drawable/ic_menu_slideshow"
-                android:title="申请取消拦截" />
+                android:title="免屏蔽" />
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="设置"
+                android:visible="false" />
         </menu>
     </item>
-    <item android:title="开发">
+    <item
+        android:title="开发"
+        android:visible="false">
         <menu>
             <item
                 android:id="@+id/nav_manage"

@@ -1,5 +1,6 @@
 package com.dustray.simplebrowser;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Vibrator;
 import android.support.design.widget.TextInputEditText;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -22,6 +24,7 @@ import com.dustray.adapter.KeywordAdapter.OnItemClickListener;
 import com.dustray.entity.KeywordEntity;
 import com.dustray.tools.GetKeyword;
 import com.dustray.tools.MyToast;
+import com.dustray.tools.SharedPreferencesHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,8 +56,9 @@ public class AddKeywordActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_add_keyword);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("添加关键字");
-
-        keywordText = (android.support.design.widget.TextInputEditText) findViewById(R.id.keyword_text);
+        getSupportActionBar().setElevation(0);
+        db = openOrCreateDatabase("browser.db", MODE_PRIVATE, null);//初始化 db
+        keywordText = (TextInputEditText) findViewById(R.id.keyword_text);
         keywordText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -67,7 +71,7 @@ public class AddKeywordActivity extends AppCompatActivity implements View.OnClic
             }
         });
         Bundle bundle = this.getIntent().getExtras();
-        if(bundle != null) {
+        if (bundle != null) {
             //传递name参数为tinyphp
             myUrl = bundle.getString("url");
             keywordText.setText(myUrl);
@@ -96,11 +100,12 @@ public class AddKeywordActivity extends AppCompatActivity implements View.OnClic
                     d1 = sDateFormat.parse(sDateFormat.format(new Date()));
                     d2 = sDateFormat.parse(keywordList.get(position).getCreatedAt());
                     long diff = d1.getTime() - d2.getTime();//这样得到的差值是微秒级别
-                    if (diff > 300000) {
-                        MyToast.toast(AddKeywordActivity.this, "时间超过5分钟，不能删除");
-                    } else {
-
+                    SharedPreferencesHelper spHelper = new SharedPreferencesHelper(AddKeywordActivity.this);
+                    if (spHelper.getUserType() == 1 || diff < 300000) {//用户类型为监护人或时长小于300秒
                         deleteKeywordFromNet(keywordList.get(position).getObjectId());
+                    } else {
+                        MyToast.toast(AddKeywordActivity.this, "时间超过5分钟，不能删除");
+
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -158,10 +163,11 @@ public class AddKeywordActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    MyToast.toast(AddKeywordActivity.this, "删除成功");
+
                     initData();
                     GetKeyword gk = new GetKeyword(AddKeywordActivity.this, db);
                     gk.getKeywordFromNet();
+                    MyToast.toast(AddKeywordActivity.this, "删除成功");
                 } else {
                     MyToast.toast(AddKeywordActivity.this, "删除失败" + e.toString());
                 }
@@ -185,6 +191,17 @@ public class AddKeywordActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        //收起键盘
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(),
+                    0);
+        }
+    }
+
     /**
      * 提交keyword到Bmob
      */
@@ -197,7 +214,7 @@ public class AddKeywordActivity extends AppCompatActivity implements View.OnClic
                 if (e == null) {
                     MyToast.toast(AddKeywordActivity.this, "添加数据成功");
                     keywordText.setText("");
-                    db = openOrCreateDatabase("browser.db", MODE_PRIVATE, null);
+
                     //从bmob查询并刷新adapter
                     initData();
                     //软件更新本地关键字

@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dustray.simplebrowser.RegisterActivity">
+
+    <ScrollView
+        android:id="@+id/register_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_register_form"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:elevation="@dimen/action_bar_shadow"
+                android:orientation="horizontal"
+                android:translationZ="@dimen/action_bar_shadow">
+
+                <RelativeLayout
+                    android:id="@+id/rl_register_form_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:orientation="vertical"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="40dp">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/actv_register_username"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/prompt_username"
+                                android:inputType="textEmailAddress"
+                                android:maxLines="1"
+                                android:shadowColor="@color/white"
+                                android:singleLine="true"
+                                android:textColor="@color/white"
+                                android:textColorHighlight="@color/white"
+                                android:textColorHint="@color/white"
+                                android:textColorLink="@color/white" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
+
+                            <EditText
+                                android:id="@+id/et_unguardian_register_password_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/prompt_unguardian_password"
+                                android:imeActionId="@+id/login"
+                                android:imeActionLabel="@string/action_register_short"
+                                android:imeOptions="actionUnspecified"
+                                android:inputType="textPassword"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textColor="@color/white" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
+
+                            <EditText
+                                android:id="@+id/et_unguardian_register_password_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/prompt_password_again"
+                                android:imeActionId="@+id/login"
+                                android:imeActionLabel="@string/action_register_short"
+                                android:imeOptions="actionUnspecified"
+                                android:inputType="textPassword"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textColor="@color/white" />
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_register_form_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:orientation="vertical"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="40dp">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/actv_register_email"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/prompt_email"
+                                android:inputType="textEmailAddress"
+                                android:maxLines="1"
+                                android:shadowColor="@color/white"
+                                android:singleLine="true"
+                                android:textColor="@color/white"
+                                android:textColorHighlight="@color/white"
+                                android:textColorHint="@color/white"
+                                android:textColorLink="@color/white" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
+
+                            <EditText
+                                android:id="@+id/et_guardian_register_password_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/prompt_guardian_password"
+                                android:imeActionId="@+id/login"
+                                android:imeActionLabel="@string/action_register_short"
+                                android:imeOptions="actionUnspecified"
+                                android:inputType="textPassword"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textColor="@color/white" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
+
+                            <EditText
+                                android:id="@+id/et_guardian_register_password_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/prompt_password_again"
+                                android:imeActionId="@+id/login"
+                                android:imeActionLabel="@string/action_register_short"
+                                android:imeOptions="actionUnspecified"
+                                android:inputType="textPassword"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textColor="@color/white" />
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/btn_register"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginLeft="82dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/xml_btn_color_accent"
+
+                        android:elevation="1dp"
+                        android:text="@string/action_register"
+                        android:textColor="@color/white"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:translationZ="1dp"
+                        android:visibility="invisible" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_next_btn_near"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="77dp"
+                        android:layout_marginRight="41dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/white"></RelativeLayout>
+
+                    <EditText
+                        android:id="@+id/et_register_identifying_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="58dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="52dp"
+                        android:layout_marginRight="12dp"
+                        android:background="@drawable/xml_btn_black_frame"
+                        android:enabled="false"
+                        android:hint="@string/prompt_identifying_code"
+                        android:inputType="number"
+                        android:paddingLeft="16dp"
+                        android:textColor="@color/grayText"
+                        android:textColorHint="@color/grayText"
+                        android:textCursorDrawable="@drawable/xml_sharp_accent" />
+
+                    <Button
+                        android:id="@+id/btn_register_go_step"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_margin="16dp"
+                        android:background="@drawable/xml_btn_color_accent"
+
+                        android:elevation="2dp"
+                        android:text="获取"
+                        android:textColor="@color/white"
+                        android:textSize="15dp"
+                        android:translationZ="2dp" />
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

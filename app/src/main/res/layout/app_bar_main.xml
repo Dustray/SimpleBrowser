@@ -7,21 +7,18 @@
     android:fitsSystemWindows="true"
     tools:context="com.dustray.simplebrowser.MainActivity">
 
-    <include layout="@layout/content_main" />
-
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:elevation="2dp"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:translationZ="2dp"
+        app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:weightSum="1"
-            app:contentInsetLeft="0dp"
-            app:contentInsetStart="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <RelativeLayout
@@ -62,7 +59,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="8dp"
-                    android:background="@drawable/xml_btn_pink"
+                    android:background="@drawable/xml_btn_color_accent"
                     android:text="搜索"
                     android:textColor="#ffffff"
                     android:visibility="gone" />
@@ -77,9 +74,36 @@
                     android:background="@drawable/xml_btn_white_frame"
                     android:text="搜索"
                     android:textColor="#ffffff" />
+
+                <LinearLayout
+
+                    android:id="@+id/ll_no_filter_toolbar_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="您已开启免屏蔽" />
+
+                    <TextView
+                        android:id="@+id/tv_no_filter_toolbar_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="剩余时长：0分钟" />
+                </LinearLayout>
+
+
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_main" />
 
 </android.support.design.widget.CoordinatorLayout>

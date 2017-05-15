@@ -1,24 +1,38 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'SimpleBrowserSigned'
+            keyPassword '199558'
+            storeFile file('C:/Users/Dustray/AndroidStudioProjects/keyfile/SimpleBrowserSignedKey.jks')
+            storePassword 'Dustray131488'
+            v2SigningEnabled false
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
     defaultConfig {
         applicationId "com.dustray.simplebrowser"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 25
-        versionCode 9
-        versionName '1.0.9-Auto'
+        versionCode 10
+        versionName '1.1.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
-    sourceSets{
-        main{
+    sourceSets {
+        main {
             jniLibs.srcDirs = ['libs']
         }
     }
@@ -31,8 +45,18 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    compile files('libs/tbs_sdk_thirdapp_v3.1.0.1034_43100_sharewithdownload_obfs_20170301_182143.jar')
+    compile files('libs/additionnal.jar')
+    compile files('libs/activation.jar')
+    compile files('libs/mail.jar')
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:design:25.0.1'
+    compile 'com.google.android.gms:play-services-appindexing:9.8.0'
+    compile 'com.android.support:support-v4:25.0.1'
+    compile 'com.android.support:support-vector-drawable:25.0.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    compile 'com.ashokvarma.android:bottom-navigation-bar:1.2.0'
     testCompile 'junit:junit:4.12'
-    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
+
+

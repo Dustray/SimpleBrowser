@@ -1,119 +1,52 @@
 package com.dustray.simplebrowser;
 
-import android.content.Intent;
-import android.database.Cursor;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import android.os.Handler;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 
-import com.dustray.adapter.HistoryAdapter;
-import com.dustray.entity.UrlEntity;
+import com.dustray.adapter.FragmentPagerHistoryAdapter;
 import com.dustray.tools.MyToast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class HistoryActivity extends AppCompatActivity {
-
-    private List<UrlEntity> historyList = new ArrayList<UrlEntity>();
-    private HistoryAdapter historyAdapter;
-    private RecyclerView rvHistory;
     private SQLiteDatabase db;
-    private int historyType = 0;
+    private TabLayout tlHistory;
+    private ViewPager vpFindHistoryPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        rvHistory = (RecyclerView) findViewById(R.id.rv_history);
-        db = openOrCreateDatabase("browser.db", MODE_PRIVATE, null);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
         getSupportActionBar().setTitle("历史纪录");
+        db = openOrCreateDatabase("browser.db", MODE_PRIVATE, null);
 
-        Bundle bundle = this.getIntent().getExtras();
-        //传递name参数为tinyphp
-        historyType = bundle.getInt("type");
-
-        initData();
-        initRecyclerView();
+        initTabLayout();
     }
 
-    /**
-     * 初始化/刷新Adapter，初始化/刷新RecyclerView
-     */
-    private void initRecyclerView() {
-        historyAdapter = new HistoryAdapter(HistoryActivity.this, historyList);
-        //item长按/短按事件
-        historyAdapter.setOnItemClickListener(new HistoryAdapter.OnItemClickListener() {
-            @Override
-            public void onLongClick(int position) {
-                MyToast.toast(HistoryActivity.this, "长按还没啥用。。。");
-            }
+    private void initTabLayout() {
+        //ViewPager
+        vpFindHistoryPager = (ViewPager) findViewById(R.id.vp_find_history_pager);
+        FragmentPagerHistoryAdapter adapter = new FragmentPagerHistoryAdapter(getSupportFragmentManager(), this);
+        vpFindHistoryPager.setAdapter(adapter);
+        //TabLayout
+        tlHistory = (TabLayout) findViewById(R.id.tl_history);
+        tlHistory.setupWithViewPager(vpFindHistoryPager);
 
-            @Override
-            public void onClick(int position) {
-                // TODO Auto-generated method stub
-                Intent intent = new Intent(HistoryActivity.this, MainActivity.class);
-                String passString = historyList.get(position).getTheURL();
-                intent.putExtra("resultUrl", passString);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
-
-        //MyToast.toast(AddKeywordActivity.this, "查询成功：共" + keywordList.size() + "条数据。");
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        //设置布局管理器
-        rvHistory.setLayoutManager(layoutManager);
-        //设置为垂直布局，这也是默认的
-        layoutManager.setOrientation(OrientationHelper.VERTICAL);
-        //设置Adapter
-        rvHistory.setAdapter(historyAdapter);
-    }
-
-    /**
-     * 初始化数据
-     */
-    private void initData() {
-        getHistory();
-    }
-
-    /**
-     * 获取历史纪录
-     */
-    private void getHistory() {
-                /*查询所有信息*/
-        Cursor c = null;
-        if (historyType == 1) {
-            c = db.rawQuery("select * from temphistory order by _id desc", null);
-        } else if (historyType == 0) {
-            c = db.rawQuery("select * from allhistory order by _id desc", null);
-        }
-        if (c != null) {
-            while (c.moveToNext()) {
-                UrlEntity ue = new UrlEntity();
-                ue.setTheTitle(c.getString(c.getColumnIndex("title")));
-                ue.setTheURL(c.getString(c.getColumnIndex("url")));
-                historyList.add(ue);
-            }
-            c.close();//释放游标
-        }
-
+//        tbHistory.addTab(tbHistory.newTab().setText("本次历史记录"));
+//        tbHistory.addTab(tbHistory.newTab().setText("所有历史记录"));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_history, menu);
         return true;
     }
@@ -126,10 +59,7 @@ public class HistoryActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.c_btn_history_delete:
-                db.delete("temphistory", null, null);
-                db.delete("allhistory", null, null);
-                MyToast.toast(HistoryActivity.this, "清空历史纪录成功");
-                finish();
+                deleteHistoryDialog();
                 break;
             default:
                 break;
@@ -137,4 +67,25 @@ public class HistoryActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void deleteHistoryDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyAlertDialogStyle);
+        builder.setTitle("警告");
+        builder.setMessage("确认清空历史纪录？");
+        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                db.delete("temphistory", null, null);
+                db.delete("allhistory", null, null);
+                MyToast.toast(HistoryActivity.this, "清空历史纪录成功");
+                finish();
+            }
+        });
+        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
+    }
 }

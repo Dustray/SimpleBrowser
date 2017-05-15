@@ -2,17 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#f0f0f0">
+    android:background="#f5f5f5">
 
     <TextView
         android:id="@+id/c_item_keyword_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="3dp"
-        android:layout_marginTop="3dp"
-        android:background="#ffffff"
-        android:padding="10dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/xml_list_item_white"
+        android:elevation="1dp"
+        android:padding="16dp"
         android:text="This is Keywords"
         android:textColor="#606060"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:translationZ="0.5dp" />
 </RelativeLayout>

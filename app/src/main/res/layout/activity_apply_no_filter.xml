@@ -9,95 +9,205 @@
 
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="#f0f0f0"
-        android:padding="4dp"
-        android:id="@+id/relativeLayout">
+        android:background="@color/colorPrimary"
+        android:elevation="@dimen/action_bar_shadow"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:translationZ="@dimen/action_bar_shadow">
 
-
-
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/relativeLayout2"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/edt_apply_pwd"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:background="@drawable/xml_btn_white"
-                android:hint="password"
-                android:paddingLeft="10dp" />
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/edt_apply_time"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginLeft="2dp"
-                android:layout_weight="0.7"
-                android:background="@drawable/xml_btn_white"
-                android:hint="minute"
-                android:paddingLeft="10dp" />
-        </LinearLayout>
-        <Button
-            android:id="@+id/btn_nofilter_time"
-            android:layout_width="41dp"
-            android:layout_height="41dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="2dp"
-            android:background="@drawable/xml_btn_green"
-            android:text="SURE"
-            android:textColor="#ffffff" />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/text_nofilter_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/textView2"
+                android:layout_toRightOf="@+id/textView2"
+                android:text="正在获取..."
+                android:textColor="@color/lightText" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="7dp"
-        android:layout_below="@+id/relativeLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/relativeLayout2">
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="当前剩余时长："
+                android:textColor="@color/lightText" />
+        </RelativeLayout>
 
-        <Button
-            android:id="@+id/btn_start_nofilter"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/xml_btn_pink"
-            android:text="开始"
-            android:textColor="#ffffff" />
-
-        <TextView
-            android:id="@+id/text_nofilter_time"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/btn_start_nofilter"
-            android:layout_alignBottom="@+id/btn_start_nofilter"
-            android:layout_toEndOf="@+id/textView2"
-            android:layout_toRightOf="@+id/textView2"
-            android:text="Loading..." />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="当前剩余分钟数："
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/relativeLayout2"
+            android:layout_marginTop="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edt_apply_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/xml_btn_white"
+                    android:hint="@string/prompt_guardian_password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="10dp"
+                    android:textColorHint="@color/grayText"
+                    android:textCursorDrawable="@drawable/xml_sharp_accent" />
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edt_apply_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/xml_btn_white"
+                    android:hint="分钟数"
+                    android:inputType="number"
+                    android:paddingLeft="10dp"
+                    android:textColorHint="@color/grayText"
+                    android:textCursorDrawable="@drawable/xml_sharp_accent" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_nofilter_time"
+                android:layout_width="70dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/xml_btn_color_accent"
+                android:text="确定"
+                android:textColor="@color/lightText" />
+        </RelativeLayout>
+
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/relativeLayout"
+        android:orientation="vertical">
 
+        <RelativeLayout
+            android:id="@+id/rl_start"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="@color/colorGray"
+            android:elevation="@dimen/action_bar_shadow"
+            android:translationZ="@dimen/action_bar_shadow">
+
+            <Button
+                android:id="@+id/btn_start_nofilter"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/xml_btn_color_accent"
+                android:elevation="2dp"
+                android:text="开 始"
+                android:textColor="@color/lightText"
+                android:textSize="25dp"
+                android:translationZ="2dp" />
+
+            <TextView
+                android:id="@+id/tv_no_filter_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_start_nofilter"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="免屏蔽状态获取中..." />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorGrayDark">
+
+            <ScrollView
+                android:id="@+id/sv_attention"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:orientation="vertical"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:text="注意:" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+
+                        android:text="*当显示主界面时才减少时长，其余界面或程序置于后台不减少" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="*重启应用后应重新开启免屏蔽服务" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="*开启免屏蔽后频繁在主界面和本界面之间切换可能会导致时长异常减少（不超过1分钟）" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="*申请时长将清空当前已有时长" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="*第一次申请时请使用监护者账号添加一次以开通申请功能" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="*免屏蔽开始后第一次点击有小概率无法打开被屏蔽页面，刷新一次网页即可解决" />
+
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

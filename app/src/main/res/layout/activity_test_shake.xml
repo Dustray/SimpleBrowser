@@ -14,4 +14,24 @@
         android:id="@+id/shake_btn"
         android:layout_width="60dp"
         android:layout_height="60dp" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_speak"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentRight="true"
+        android:text="转换" />
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/edt_to_speak"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/shake_btn"
+        android:background="@drawable/xml_edt_gray_light"
+        android:gravity="top"
+        android:hint="请输入内容"
+        android:inputType="textMultiLine"
+        android:padding="10dp" />
+
+
 </RelativeLayout>

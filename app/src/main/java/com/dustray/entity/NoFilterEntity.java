@@ -7,8 +7,17 @@ import cn.bmob.v3.BmobObject;
  */
 
 public class NoFilterEntity extends BmobObject {
-    private int userID;
+    private String userID;
     private int noFilterTime;
+    private int waitingForApplyTime;
+
+    public int getWaitingForApplyTime() {
+        return waitingForApplyTime;
+    }
+
+    public void setWaitingForApplyTime(int waitingForApplyTime) {
+        this.waitingForApplyTime = waitingForApplyTime;
+    }
 
     public int getNoFilterTime() {
         return noFilterTime;
@@ -18,11 +27,11 @@ public class NoFilterEntity extends BmobObject {
         this.noFilterTime = noFilterTime;
     }
 
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 }

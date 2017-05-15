@@ -1,31 +1,34 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.reclerviewpractice.MainActivity" >
+    tools:context="com.example.reclerviewpractice.MainActivity">
 
     <item
         android:id="@+id/c_btn_history_delete"
         android:icon="@drawable/ic_menu_delete"
         android:orderInCategory="100"
         android:title="删除"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/id_action_gridview1"
         android:orderInCategory="100"
-         android:title="韦韦"
-        app:showAsAction="never"/>
-    
+        android:title="韦韦"
+        android:visible="false"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/id_action_listview1"
         android:orderInCategory="100"
-         android:title="我"
-        app:showAsAction="never"/>
-    
+        android:title="我"
+        android:visible="false"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/id_action_horizontalGridView1"
         android:orderInCategory="100"
-         android:title="喜欢你"
-        app:showAsAction="never"/>
-    
+        android:title="喜欢你"
+        android:visible="false"
+        app:showAsAction="never" />
+
 </menu>

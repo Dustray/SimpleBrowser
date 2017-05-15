@@ -4,59 +4,66 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.internal.NavigationMenuView;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+
 import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebSettings.LayoutAlgorithm;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+
+import com.dustray.entity.NoFilterEntity;
+import com.dustray.tools.MyToast;
+import com.dustray.tools.SharedPreferencesHelper;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebSettings.LayoutAlgorithm;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
+
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dustray.entity.UrlEntity;
 import com.dustray.source.SiteFilter;
 import com.dustray.tools.GetKeyword;
-import com.dustray.tools.MyToast;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
@@ -66,27 +73,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
-
-import static android.support.v7.appcompat.R.attr.height;
-import static android.support.v7.appcompat.R.id.top;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
+    private int noFilterTime = 0, noFilterTimeTemp = 0;//单位秒
+    private boolean isActivityPause = false;
     private Intent intent;
     private WebView webView;
     private String searchStr = "";
     private String nowUrl = "", nowTitle = "";
     private EditText editText;
-    private AppCompatImageView goBackBtn, goForwardBtn, refreshBtn, linkBtn, gohomeBtn;
+    private TextView tvNoFilterToolbarHint;
+    private LinearLayout llNoFilterToolbarHint;
+    private AppCompatImageButton goBackBtn, goForwardBtn, refreshBtn, linkBtn, gohomeBtn;
     private ContentLoadingProgressBar progressBar;
     private SQLiteDatabase db;
     private List<UrlEntity> urlList = new ArrayList<UrlEntity>();
     private Vibrator vibrator;//震动
+    private ButtonBarLayout ablFunctionBar;
     private Button searchBtn, showSearchBtn, cleanSearchBtn;
-    private CheckBox checkNeverShow;
-    private SharedPreferences mSharedPreferences;
     private SwipeRefreshLayout swipeLayout;
+    private SharedPreferencesHelper spHelper;
+    private timeCount tc;
+    Toolbar toolbar;
     //初始化动画
     Animation showAnimation = new ScaleAnimation(0.0f, 1.0f, 1.0f, 1.0f);
     Animation hideAnimation = new ScaleAnimation(1.0f, 0.0f, 1.0f, 1.0f);
@@ -104,23 +116,42 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Bmob.initialize(this, "1a67de83b1b060162bbad1b79bf1bd37");
+        spHelper = new SharedPreferencesHelper(MainActivity.this);
+        int a = spHelper.getUserType();
+        if (a == 0) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
         //键盘初始化
         imm = (InputMethodManager) MainActivity.this.getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
         //动画设置时间
         showAnimation.setDuration(100);
         hideAnimation.setDuration(100);
         loadWebView();//加载SwipeRefreshLayout和WebView
+        spHelper.setIsNoFilter(false);
+        initNoFilterTimer();
         initializeControl();//初始化其他控件
         initializeDatabase();//初始化sqlite
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //取消滚动条
+        NavigationMenuView navigationMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+        navigationMenuView.setVerticalScrollBarEnabled(false);
         // ATTENTION: This was auto-generated t o implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
         vibrator = (Vibrator) getSystemService(MainActivity.this.VIBRATOR_SERVICE);
-        mSharedPreferences = getSharedPreferences("localSetting", 0);
-        if (mSharedPreferences.getInt("ifNeverShowMsgForWei", 0) == 0) {
-            dialog();
+
+    }
+
+    private void initNoFilterTimer() {
+        if (spHelper.getIsNoFilter()) {
+            tc = new timeCount(spHelper.getNoFilterTime(), 1000);
+            noFilterTimeTemp = spHelper.getNoFilterTime() / 1000;
+            llNoFilterToolbarHint.setVisibility(View.VISIBLE);
+            toolbar.setBackgroundResource(R.color.colorAccent);
+            ablFunctionBar.setBackgroundResource(R.color.colorAccent);
+            tc.start();
         }
     }
 
@@ -134,7 +165,7 @@ public class MainActivity extends AppCompatActivity
          /*创建表，integer为整形，text为字符串，primary key代表主键，autoincrement代表自增，not null代表不为空*/
         db.execSQL("create table if not exists temphistory(_id integer primary key autoincrement, title text not null, url text not null)");//临时历史表
         db.execSQL("create table if not exists allhistory(_id integer primary key autoincrement, title text not null, url text not null)");//所有历史表
-        db.execSQL("create table if not exists allkeyword(_id integer primary key autoincrement, keyword text not null)");//所有历史表
+        db.execSQL("create table if not exists allkeyword(_id integer primary key autoincrement, keyword text not null)");//所有过滤关键字表
         //删除临时历史纪录表重新计算
         db.delete("temphistory", null, null);
         GetKeyword gk = new GetKeyword(MainActivity.this, db);
@@ -185,12 +216,19 @@ public class MainActivity extends AppCompatActivity
 
         });
         editText.clearFocus();//不聚焦
+        tvNoFilterToolbarHint = (TextView) findViewById(R.id.tv_no_filter_toolbar_hint);
+        llNoFilterToolbarHint = (LinearLayout) findViewById(R.id.ll_no_filter_toolbar_hint);
+
         progressBar = (ContentLoadingProgressBar) findViewById(R.id.progress_bar);
-        goBackBtn = (AppCompatImageView) findViewById(R.id.goback_btn);
-        goForwardBtn = (AppCompatImageView) findViewById(R.id.goforward_btn);
-        refreshBtn = (AppCompatImageView) findViewById(R.id.refresh_btn);
-        gohomeBtn = (AppCompatImageView) findViewById(R.id.gohome_btn);
-        linkBtn = (AppCompatImageView) findViewById(R.id.link_btn);
+
+        ablFunctionBar = (ButtonBarLayout) findViewById(R.id.abl_function_bar);
+
+        goBackBtn = (AppCompatImageButton) findViewById(R.id.goback_btn);
+        goForwardBtn = (AppCompatImageButton) findViewById(R.id.goforward_btn);
+        refreshBtn = (AppCompatImageButton) findViewById(R.id.refresh_btn);
+        gohomeBtn = (AppCompatImageButton) findViewById(R.id.gohome_btn);
+        linkBtn = (AppCompatImageButton) findViewById(R.id.link_btn);
+
         goBackBtn.setOnClickListener(this);
         goForwardBtn.setOnClickListener(this);
         refreshBtn.setOnClickListener(this);
@@ -198,7 +236,7 @@ public class MainActivity extends AppCompatActivity
         linkBtn.setOnClickListener(this);
 
         //toolbar初始化
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -208,39 +246,30 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void dialog() {
+    public void noFilterTimeOverDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyAlertDialogStyle);
-        LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.dialog_never_show, null);
-        checkNeverShow = (CheckBox) linearLayout.findViewById(R.id.check_never_show);
-        builder.setView(linearLayout);
+        //LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.dialog_never_show, null);
+        //checkNeverShow = (CheckBox) linearLayout.findViewById(R.id.check_never_show);
+        //builder.setView(linearLayout);
         builder.setTitle("提示");
-        builder.setMessage("您有一封信，是否阅读");
-        builder.setPositiveButton("好的", new DialogInterface.OnClickListener() {
+        builder.setMessage("您的免屏蔽时长已到，是否重新申请？");
+        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // TODO Auto-generated method stub
-                if (checkNeverShow.isChecked()) {
-                    SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-                    mEditor.putInt("ifNeverShowMsgForWei", 1);
-                    mEditor.commit();
-                }
-                Intent intent = new Intent(MainActivity.this, MessageForWeiActivity.class);
+                Intent intent = new Intent(MainActivity.this, ApplyNoFilterActivity.class);
                 startActivity(intent);
+
             }
         });
-        builder.setNegativeButton("不看", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // TODO Auto-generated method stub
-                if (checkNeverShow.isChecked()) {
-                    SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-                    mEditor.putInt("ifNeverShowMsgForWei", 1);
-                    mEditor.commit();
-                }
+
             }
         });
         builder.show();
     }
+
 
     /**
      * 加载web
@@ -273,11 +302,13 @@ public class MainActivity extends AppCompatActivity
      * 加载WebView
      */
     public void loadWebView() {
+        //解决网页中的视频，上屏幕的时候，可能出现闪烁的情况
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
         //下拉刷新控件
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(android.R.color.holo_orange_dark, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
-
+        swipeLayout.setEnabled(false);
         webView = (WebView) findViewById(R.id.web_view);
         //支持javascript
         webView.getSettings().setJavaScriptEnabled(true);
@@ -290,6 +321,7 @@ public class MainActivity extends AppCompatActivity
         //自适应屏幕
         webView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
         webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setDisplayZoomControls(false);
         if (Build.VERSION.SDK_INT > 17) {
             webView.addJavascriptInterface(new InJavaScriptLocalObj(), "local_obj");
         }
@@ -316,6 +348,7 @@ public class MainActivity extends AppCompatActivity
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 swipeLayout.setRefreshing(false);
+
                 webView.reload();// 刷新页面
             }
         }, 100);
@@ -342,8 +375,9 @@ public class MainActivity extends AppCompatActivity
             SiteFilter sf = new SiteFilter(MainActivity.this, db);
             //Toast.makeText(MainActivity.this, url, Toast.LENGTH_SHORT).show();
 
-            if (!sf.filterWebsite(url)) {
-                Toast.makeText(MainActivity.this, "已拦截，关键字：" + sf.getFilterKey(), Toast.LENGTH_SHORT).show();
+            if (!spHelper.getIsNoFilter() && !sf.filterWebsite(url)) {
+               // Toast.makeText(MainActivity.this, "已拦截，关键字：" + sf.getFilterKey(), Toast.LENGTH_SHORT).show();
+                MyToast.toast(MainActivity.this, "已拦截，关键字："+ sf.getFilterKey());
                 webView.stopLoading();
                 webView.goBack();
             }
@@ -357,8 +391,9 @@ public class MainActivity extends AppCompatActivity
             view.loadUrl("javascript:window.local_obj.showSource('<head>'+" +
                     "document.getElementsByTagName('html')[0].innerHTML+'</head>');");
             SiteFilter sf = new SiteFilter(MainActivity.this, db);
-            if (!sf.filterWebsite(url)) {
+            if (!spHelper.getIsNoFilter() && !sf.filterWebsite(url)) {
                 //Toast.makeText(MainActivity.this, "已拦截，关键字："+sf.getFilterKey(), Toast.LENGTH_SHORT).show();
+                MyToast.toast(MainActivity.this, "已拦截，关键字："+ sf.getFilterKey());
                 webView.stopLoading();
                 webView.goBack();
             }
@@ -433,7 +468,7 @@ public class MainActivity extends AppCompatActivity
             // Toast.makeText(MainActivity.this, html, Toast.LENGTH_SHORT).show();
             SiteFilter sf = new SiteFilter(MainActivity.this, db);
             if (!sf.filterKeyWord(html)) {
-                Snackbar.make(webView, "此网站是否为新闻网站，关键词：" + sf.getFilterKey(), Snackbar.LENGTH_LONG)
+                Snackbar.make(webView, "此网站是否为新闻、娱乐网站，关键词：" + sf.getFilterKey(), Snackbar.LENGTH_LONG)
                         .setAction("是", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -482,22 +517,9 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_history) {
             // Handle the camera action
             Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
-            //用Bundle携带数据
-            Bundle bundle = new Bundle();
-            //传递name参数为tinyphp
-            bundle.putInt("type", 0);
-            intent.putExtras(bundle);
-            startActivityForResult(intent, 1);
-        } else if (id == R.id.nav_gallery) {
-            Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
-            //用Bundle携带数据
-            Bundle bundle = new Bundle();
-            //传递name参数为tinyphp
-            bundle.putInt("type", 1);
-            intent.putExtras(bundle);
             startActivityForResult(intent, 1);
         } else if (id == R.id.nav_slideshow) {
             Intent intent = new Intent(MainActivity.this, AddKeywordActivity.class);
@@ -510,6 +532,9 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_nofilter) {
             Intent intent = new Intent(MainActivity.this, ApplyNoFilterActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_setting) {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_share) {
 
@@ -617,6 +642,25 @@ public class MainActivity extends AppCompatActivity
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
         AppIndex.AppIndexApi.start(client, getIndexApiAction());
+        //spHelper.setIsNoFilter(false);
+        isActivityPause = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isActivityPause = false;
+        initNoFilterTimer();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isActivityPause = true;
+        if (spHelper.getIsNoFilter()) {
+            tc.onFinish();
+            tc.cancel();
+        }
     }
 
     @Override
@@ -629,4 +673,78 @@ public class MainActivity extends AppCompatActivity
         client.disconnect();
         vibrator.cancel();
     }
+
+
+    /**
+     * 修改time到Bmob
+     */
+    private void updateNoFilterTimeToNet() {
+        NoFilterEntity nfe = new NoFilterEntity();
+        nfe.setNoFilterTime(noFilterTime / 60);
+        if (spHelper.getNoFilterID() != null) {
+            nfe.update(spHelper.getNoFilterID(), new UpdateListener() {
+                @Override
+                public void done(BmobException e) {
+                    if (e == null) {
+
+                        //MyToast.toast(ApplyNoFilterActivity.this, "修改数据成功");
+                    } else {
+                        //MyToast.toast(MainActivity.this, "修改数据失败：" + e.getMessage());
+                    }
+                }
+
+            });
+        } else {
+            MyToast.toast(this, "如果长时间没有出现此条Toast，请删除");
+            tc.onFinish();
+            tc.cancel();
+        }
+    }
+
+    public class timeCount extends CountDownTimer {
+
+        public timeCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long l) {
+            noFilterTime = (int) (l / 1000);//单位秒
+
+            if (noFilterTime == 1) {
+                spHelper.setIsNoFilter(false);
+                isActivityPause = true;
+                noFilterTimeOverDialog();
+                onFinish();
+            }
+//            if (noFilterTimeTemp - noFilterTime >= 1 && !isActivityPause && spHelper.getIsNoFilter()) {
+//                if (noFilterTime < 59)
+//                    MyToast.toast(MainActivity.this, "测试" + noFilterTimeTemp + "s" + noFilterTime);
+//            }
+            if (noFilterTimeTemp / 60 - noFilterTime / 60 >= 1 && !isActivityPause && spHelper.getIsNoFilter()) {
+                spHelper.setNoFilterTime(noFilterTime * 1000);
+
+                updateNoFilterTimeToNet();
+                //MyToast.toast(MainActivity.this, "时长已刷新，还剩" + noFilterTime/60+"分钟");
+                tvNoFilterToolbarHint.setText("剩余时长：" + (noFilterTime / 60 + 1) + "分钟");
+                //MyToast.toast(MainActivity.this, "测试时长已刷新" + noFilterTimeTemp + "s" + noFilterTime);
+                noFilterTimeTemp = noFilterTime;
+            }
+//            btnRegisterGoStep.setText(l / 1000 + "");
+//            btnRegisterGoStep.setEnabled(false);
+//            btnRegisterGoStep.setBackgroundResource(R.drawable.xml_btn_color_accent);
+        }
+
+        @Override
+        public void onFinish() {
+            spHelper.setNoFilterTime(noFilterTime * 1000);
+            llNoFilterToolbarHint.setVisibility(View.GONE);
+            toolbar.setBackgroundResource(R.color.colorPrimary);
+            ablFunctionBar.setBackgroundResource(R.color.colorPrimary);
+//            btnRegisterGoStep.setEnabled(true);
+//            btnRegisterGoStep.setText("获取");
+//            btnRegisterGoStep.setBackgroundResource(R.drawable.xml_btn_color_accent);
+        }
+    }
 }
+

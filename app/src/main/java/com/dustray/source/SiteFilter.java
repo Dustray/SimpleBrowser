@@ -21,7 +21,7 @@ public class SiteFilter {
     private List<KeywordEntity> keywordList = new ArrayList<KeywordEntity>();
     private SQLiteDatabase db;
     private Context mContext;
-    private String theKey;
+    private String theKey = "";
 
     public SiteFilter(Context mContext, SQLiteDatabase db) {
         this.mContext = mContext;
@@ -46,14 +46,15 @@ public class SiteFilter {
         }
         return result;
     }
+
     //获取拦截关键字
-    public String getFilterKey(){
+    public String getFilterKey() {
         return theKey;
     }
+
     private void getKeyword() {
                 /*查询所有信息*/
         Cursor c = db.rawQuery("select * from allkeyword", null);
-
         if (c != null) {
             while (c.moveToNext()) {
                 KeywordEntity ke = new KeywordEntity();
@@ -62,17 +63,20 @@ public class SiteFilter {
             }
             c.close();//释放游标
         }
-
     }
 
-    //页内文本过滤
+    //页内文本过滤探测
     public boolean filterKeyWord(String html) {
-        boolean result = true;
-        String keyword[] = {"新闻网", "日报", "记者", "日讯", "近日", "媒体", "报道", "依法", "调查", "摄影师", "网友", "爆料", "微博", "全国", "新华", "央视"};
+        boolean result = true, isDouble = false;
+
+        String keyword[] = {"新闻网","朋友圈", "日报", "记者", "日讯", "近日", "媒体", "报道", "依法", "调查", "摄影师", "网友", "爆料", "微博", "全国", "新华", "央视"};
         for (int i = 0; i < keyword.length; i++) {
-            if (html.contains(keyword[i])) {
-                theKey = keyword[i];
+            if (html.contains(keyword[i])&&isDouble) {
+                theKey += "/"+keyword[i];
                 result = false;
+            } else if(html.contains(keyword[i])){
+                theKey = keyword[i];
+                isDouble = true;
             }
         }
         return result;

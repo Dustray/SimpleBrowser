@@ -5,11 +5,50 @@
         <!-- Customize your theme here. -->
         <item name="colorAccent">@color/colorAccent</item>
         <!-- toolbar（actionbar）颜色 -->
-        <item name="colorPrimary">#03a9f4</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <!-- 状态栏颜色 -->
-        <item name="colorPrimaryDark">#03a9f4</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <!-- 窗口的背景颜色 -->
         <item name="android:windowBackground">@android:color/white</item>
+
+        <item name="android:textColorHint">@color/lightText</item>
+        <!--下划线没有获取焦点的颜色 -->
+        <item name="colorControlNormal">@color/lightText</item>
+        <!--获取焦点或者点击的时候 下划线 的颜色-->
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+    </style>
+    <style name="AppThemeNoFilter" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/colorPrimary</item>
+        <!-- toolbar（actionbar）颜色 -->
+        <item name="colorPrimary">@color/colorAccent</item>
+        <!-- 状态栏颜色 -->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!-- 窗口的背景颜色 -->
+        <item name="android:windowBackground">@android:color/white</item>
+
+        <item name="android:textColorHint">@color/lightText</item>
+        <!--下划线没有获取焦点的颜色 -->
+        <item name="colorControlNormal">@color/lightText</item>
+        <!--获取焦点或者点击的时候 下划线 的颜色-->
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+    </style>
+
+
+    <style name="TextInputTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:textColorHint">@color/lightText</item>
+        <!--下划线没有获取焦点的颜色 -->
+        <item name="colorControlNormal">@color/lightText</item>
+        <!--获取焦点或者点击的时候 下划线 的颜色-->
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -22,7 +61,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <!-- Used for the buttons -->
-        <item name="colorAccent">#03a9f4</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <!-- Used for the title and text -->
         <item name="android:textColorPrimary">#000000</item>
         <!-- Used for the background -->

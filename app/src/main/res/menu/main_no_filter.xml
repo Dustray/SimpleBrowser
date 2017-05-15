@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.reclerviewpractice.MainActivity">
+
+    <item
+        android:id="@+id/item_btn_no_filter_refresh"
+        android:icon="@drawable/ic_menu_refresh"
+        android:orderInCategory="100"
+        android:title="刷新"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/id_null"
+        android:orderInCategory="100"
+        android:title="占位"
+        android:visible="false"
+        app:showAsAction="never" />
+
+
+</menu>
